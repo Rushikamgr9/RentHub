@@ -1,10 +1,11 @@
 // src/pages/chat.jsx
 import { useState } from "react";
 import ChatBox from "../components/chat/ChatBox";
+import { useRooms } from "../hooks/useRooms";
 
 function Chat() {
   const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+  const { rooms } = useRooms();
 
   return (
     <div>

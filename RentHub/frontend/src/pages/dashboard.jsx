@@ -1,19 +1,11 @@
 // src/pages/dashboard.jsx
-import { useEffect, useState } from "react";
+import { useRooms } from "../hooks/useRooms";
+import { useAuth } from "../hooks/useAuth";
 
 function Dashboard() {
-  const [rooms, setRooms] = useState([]);
-  const [role, setRole] = useState("");
-
-  useEffect(() => {
-    const storedRooms = JSON.parse(localStorage.getItem("rooms")) || [];
-    setRooms(storedRooms);
-
-    const storedRole = localStorage.getItem("userRole"); // FIXED
-    setRole(storedRole);
-
-    console.log("Current Role:", storedRole);
-  }, []);
+  const { rooms } = useRooms();
+  const { user } = useAuth();
+  const role = user?.role;
 
   return (
     <div>

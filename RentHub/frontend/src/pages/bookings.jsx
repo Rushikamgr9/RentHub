@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react"
+import { useRooms } from "../hooks/useRooms";
 
 function Bookings() {
-  const role = localStorage.getItem("userRole")
-  const [bookings, setBookings] = useState([])
-
-  useEffect(() => {
-    const storedBookings = JSON.parse(localStorage.getItem("bookings")) || []
-    setBookings(storedBookings)
-  }, [])
+  const { bookings } = useRooms();
 
   return (
     <div>
@@ -16,24 +10,15 @@ function Bookings() {
       {bookings.length === 0 ? (
         <p>No bookings yet.</p>
       ) : (
-        bookings.map(booking => (
-          <div
-            key={booking.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "15px",
-              marginBottom: "10px",
-              borderRadius: "8px"
-            }}
-          >
+        bookings.map((booking) => (
+          <div key={booking.id} className="room-card">
             <h3>{booking.title}</h3>
             <p>Location: {booking.location}</p>
             <p>Price: Rs. {booking.price}</p>
             <p>Status: Confirmed</p>
           </div>
         ))
-      )}
-    </div>
+      )}    </div>
   )
 }
 

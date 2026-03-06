@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth";
 
 function Sidebar() {
-  const role = localStorage.getItem("userRole")
+  const { user } = useAuth();
+  const role = user?.role;
 
   return (
     <div style={{
