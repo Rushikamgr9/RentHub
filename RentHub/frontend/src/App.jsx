@@ -4,7 +4,7 @@ import Layout from "./components/layout"
 import ProtectedRoute from "./utils/protectedRoute"
 
 import Home from "./pages/home"
-import Login from "./pages/login"
+import Login from "./pages/Login"
 import Dashboard from "./pages/dashboard"
 import Rooms from "./pages/rooms"
 import Bookings from "./pages/bookings"
