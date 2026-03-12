@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth";
 
 function Topbar() {
   const navigate = useNavigate()
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("userRole")
-    navigate("/login")
+    logout();
+    navigate("/login");
   }
 
   return (
