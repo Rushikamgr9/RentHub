@@ -3,7 +3,9 @@ import cors from "cors"
 import roomsRoute from "./routes/rooms.js"
 
 const app = express()
+const reviewRoutes = require("./routes/reviewRoutes");
 
+app.use("/api/reviews", reviewRoutes);
 app.use(cors())
 app.use(express.json())
 
