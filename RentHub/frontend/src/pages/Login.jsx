@@ -1,66 +1,61 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { useAuth } from "../hooks/useAuth";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import axios from "axios"
+import { useNavigate } from "react-router-dom" // ← import useNavigate
 
-function Login() {
-  const [role, setRole] = useState("tenant")
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate()
-  const { login } = useAuth();
+export default function Login(){
 
-  const handleLogin = () => {
-    // TODO: Add real validation and API authentication
-    if (!email || !password) {
-      alert("Please fill in all fields");
-      return;
-    }
-    login(role);
-    navigate("/dashboard");
-  }
+ const [email,setEmail] = useState("")
+ const [password,setPassword] = useState("")
+ const navigate = useNavigate()
 
-  return (
-    <div style={{ padding: "50px", maxWidth: "400px" }}>
-      <h2>Login</h2>
-      <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-        <Input
-          type="email"
-          label="Email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+ const handleLogin = async(e)=>{
+   e.preventDefault()
 
-        <Input
-          type="password"
-          label="Password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+   try{
+     const res = await axios.post("http://localhost:5000/api/auth/login",{
+       email,
+       password
+     })
 
-        <div className="input-group">
-          <label>Select Role</label>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            style={{
-              padding: "0.5rem",
-              border: "1px solid #ccc",
-              borderRadius: "4px",
-            }}
-          >
-            <option value="tenant">Tenant</option>
-            <option value="landlord">Landlord</option>
-          </select>
-        </div>
+     localStorage.setItem("token",res.data.token)
+     localStorage.setItem("role", res.data.role)
 
-        <Button type="submit" primary>Login</Button>
-      </form>
-    </div>
-  )
+     alert("Login successful")
+     navigate("/dashboard")
+
+   }catch(err){
+     console.log(err)
+     alert("Login failed")
+   }
+ }
+
+ return(
+   <div>
+     <h2>Login</h2>
+
+     <form onSubmit={handleLogin}>
+
+       <input
+       type="email"
+       placeholder="Email"
+       onChange={(e)=>setEmail(e.target.value)}
+       />
+
+       <br/>
+
+       <input
+       type="password"
+       placeholder="Password"
+       onChange={(e)=>setPassword(e.target.value)}
+       />
+
+       <br/>
+
+       <button type="submit">Login</button>
+
+     </form>
+
+   </div>
+ )
+
 }
-
-export default Login

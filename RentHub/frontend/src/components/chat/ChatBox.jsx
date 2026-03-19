@@ -1,40 +1,34 @@
-// src/components/chat/ChatBox.jsx
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
-function ChatBox({ roomId }) {
-  const [messages, setMessages] = useState([]);
-  const [text, setText] = useState("");
+const socket = io("http://localhost:5000");
 
-  useEffect(() => {
-    const allMessages = JSON.parse(localStorage.getItem("messages")) || {};
-    setMessages(allMessages[roomId] || []);
-  }, [roomId]);
+export default function ChatBox(){
+  const [message,setMessage] = useState("");
+  const [chat,setChat] = useState([]);
 
-  const sendMessage = () => {
-    if (!text.trim()) return;
+  useEffect(()=>{
+    socket.on("receive_message",(data)=>{
+      setChat(prev=>[...prev,data]);
+    })
+  },[]);
 
-    const newMessage = { id: Date.now(), text, sender: "You" };
-    const allMessages = JSON.parse(localStorage.getItem("messages")) || {};
-    const roomMessages = allMessages[roomId] || [];
-    const updatedMessages = [...roomMessages, newMessage];
+  const sendMessage = ()=>{
+    if(message.trim()==="") return;
+    socket.emit("send_message",message);
+    setChat(prev=>[...prev,message]);
+    setMessage("");
+  }
 
-    allMessages[roomId] = updatedMessages;
-    localStorage.setItem("messages", JSON.stringify(allMessages));
-    setMessages(updatedMessages);
-    setText("");
-  };
-
-  return (
-    <div>
-      <div style={{ border: "1px solid #ccc", height: "200px", overflowY: "scroll", marginBottom: "10px", padding: "5px" }}>
-        {messages.map(m => (
-          <p key={m.id}><strong>{m.sender}:</strong> {m.text}</p>
-        ))}
+  return(
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-scroll border p-3 mb-2">
+        {chat.map((m,i)=><p key={i}>{m}</p>)}
       </div>
-      <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Type message..." />
-      <button onClick={sendMessage}>Send</button>
+      <div className="flex">
+        <input className="flex-1 p-2 border" value={message} onChange={e=>setMessage(e.target.value)} placeholder="Type message"/>
+        <button className="bg-blue-500 text-white px-4 py-2" onClick={sendMessage}>Send</button>
+      </div>
     </div>
   )
 }
-
-export default ChatBox;
