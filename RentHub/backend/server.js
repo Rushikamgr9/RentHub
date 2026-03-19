@@ -10,16 +10,12 @@ import db from "./db.js"; // mysql2 connection
 import { Server } from "socket.io";
 import http from "http";
 
-dotenv.config();
-const app = express();
-app.use(cors());
-app.use(express.json());
+const app = express()
+const reviewRoutes = require("./routes/reviewRoutes");
 
-// API Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/rooms", roomRoutes);
-app.use("/api/bookings", bookingRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use(cors())
+app.use(express.json())
 
 // Create HTTP server and Socket.io
 const server = http.createServer(app);
