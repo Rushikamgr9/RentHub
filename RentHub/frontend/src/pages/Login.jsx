@@ -1,40 +1,61 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { useNavigate } from "react-router-dom" // ← import useNavigate
 
-function Login() {
-  const [role, setRole] = useState("tenant")
-  const navigate = useNavigate()
+export default function Login(){
 
-  const handleLogin = () => {
-    // Save role in localStorage
-    localStorage.setItem("userRole", role)
+ const [email,setEmail] = useState("")
+ const [password,setPassword] = useState("")
+ const navigate = useNavigate()
 
-    // Redirect to dashboard
-    navigate("/dashboard")
-  }
+ const handleLogin = async(e)=>{
+   e.preventDefault()
 
-  return (
-    <div style={{ padding: "50px" }}>
-      <h2>Login</h2>
+   try{
+     const res = await axios.post("http://localhost:5000/api/auth/login",{
+       email,
+       password
+     })
 
-      <input type="email" placeholder="Enter Email" />
-      <br /><br />
+     localStorage.setItem("token",res.data.token)
+     localStorage.setItem("role", res.data.role)
 
-      <input type="password" placeholder="Enter Password" />
-      <br /><br />
+     alert("Login successful")
+     navigate("/dashboard")
 
-      <label>Select Role:</label>
-      <br />
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="tenant">Tenant</option>
-        <option value="landlord">Landlord</option>
-      </select>
+   }catch(err){
+     console.log(err)
+     alert("Login failed")
+   }
+ }
 
-      <br /><br />
+ return(
+   <div>
+     <h2>Login</h2>
 
-      <button onClick={handleLogin}>Login</button>
-    </div>
-  )
+     <form onSubmit={handleLogin}>
+
+       <input
+       type="email"
+       placeholder="Email"
+       onChange={(e)=>setEmail(e.target.value)}
+       />
+
+       <br/>
+
+       <input
+       type="password"
+       placeholder="Password"
+       onChange={(e)=>setPassword(e.target.value)}
+       />
+
+       <br/>
+
+       <button type="submit">Login</button>
+
+     </form>
+
+   </div>
+ )
+
 }
-
-export default Login

@@ -1,39 +1,57 @@
 import { Link } from "react-router-dom"
 
-function Sidebar() {
-  const role = localStorage.getItem("userRole")
+export default function Sidebar(){
 
-  return (
-    <div style={{
-      width: "220px",
-      height: "100vh",
-      backgroundColor: "#1e293b",
-      color: "white",
-      padding: "20px"
-    }}>
-      <h2>RentHub</h2>
+  const role = localStorage.getItem("role")
 
-      <nav style={{ marginTop: "30px" }}>
-        <p><Link to="/dashboard" style={{ color: "white" }}>Dashboard</Link></p>
+  return(
+    <div className="w-64 h-screen bg-gray-800 text-white p-5 flex flex-col">
 
+      <h2 className="text-2xl font-bold mb-8">RentHub</h2>
+
+      <nav className="flex flex-col gap-3">
+
+        <Link to="/dashboard" className="hover:bg-gray-700 p-2 rounded">
+          Dashboard
+        </Link>
+
+        {/* LANDLORD MENU */}
         {role === "landlord" && (
           <>
-            <p><Link to="/rooms" style={{ color: "white" }}>Manage Rooms</Link></p>
-            <p><Link to="/bookings" style={{ color: "white" }}>Bookings</Link></p>
+            <Link to="/add-room" className="hover:bg-gray-700 p-2 rounded">
+              Add Room
+            </Link>
+
+            <Link to="/rooms" className="hover:bg-gray-700 p-2 rounded">
+              My Rooms
+            </Link>
+
+            <Link to="/bookings" className="hover:bg-gray-700 p-2 rounded">
+              Booking Requests
+            </Link>
           </>
         )}
 
+        {/* TENANT MENU */}
         {role === "tenant" && (
           <>
-            <p><Link to="/rooms" style={{ color: "white" }}>Browse Rooms</Link></p>
-            <p><Link to="/bookings" style={{ color: "white" }}>My Bookings</Link></p>
+            <Link to="/rooms" className="hover:bg-gray-700 p-2 rounded">
+              Search Rooms
+            </Link>
+
+            <Link to="/bookings" className="hover:bg-gray-700 p-2 rounded">
+              My Bookings
+            </Link>
           </>
         )}
 
-        <p><Link to="/chat" style={{ color: "white" }}>Chat</Link></p>
+        {/* BOTH ROLES */}
+        <Link to="/chat" className="hover:bg-gray-700 p-2 rounded">
+          Chat
+        </Link>
+
       </nav>
+
     </div>
   )
 }
-
-export default Sidebar

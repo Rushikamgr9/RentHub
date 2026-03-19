@@ -1,38 +1,39 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-
-import Layout from "./components/layout"
-import ProtectedRoute from "./utils/protectedRoute"
-
-import Home from "./pages/home"
-import Login from "./pages/Login"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Sidebar from "./components/sidebar"
+import Topbar from "./components/topbar"
 import Dashboard from "./pages/dashboard"
 import Rooms from "./pages/rooms"
+import AddRoom from "./pages/addRoom"
 import Bookings from "./pages/bookings"
 import Chat from "./pages/chat"
+import Login from "./pages/Login"
+import Home from "./pages/home"
+
+function Layout({children}){
+  return(
+    <div className="flex min-h-screen">
+      <Sidebar/>
+      <div className="flex-1 flex flex-col">
+        <Topbar/>
+        <main className="p-6 bg-gray-50 flex-1">{children}</main>
+      </div>
+    </div>
+  )
+}
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-
-        <Route element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }>
-
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/rooms" element={<Rooms />} />
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/chat" element={<Chat />} />
-
-        </Route>
-
+        <Route path="/" element={<Home/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/dashboard" element={<Layout><Dashboard/></Layout>}/>
+        <Route path="/add-room" element={<Layout><AddRoom/></Layout>}/>
+        <Route path="/rooms" element={<Layout><Rooms/></Layout>}/>
+        <Route path="/bookings" element={<Layout><Bookings/></Layout>}/>
+        <Route path="/chat" element={<Layout><Chat/></Layout>}/>
       </Routes>
-    </Router>
+    </BrowserRouter>
   )
 }
 
