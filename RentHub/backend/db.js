@@ -1,18 +1,15 @@
-import mysql from "mysql2"
+// backend/utils/db.js
+import mysql from "mysql2";
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "1234",
-  database: "renthub"
-})
+  database: "renthub",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
 
-db.connect((err) => {
-  if (err) {
-    console.log("Database connection failed")
-  } else {
-    console.log("MySQL Connected")
-  }
-})
 
-export default db
+export default db; 
