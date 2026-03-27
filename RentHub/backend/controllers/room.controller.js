@@ -1,7 +1,7 @@
 // backend/controllers/room.controller.js
 import db from "../db.js";
 
-//  Add Room (Landlord)
+// 1️⃣ Add Room (Landlord)
 export const addRoom = (req, res) => {
   const { title, description, price, location, latitude, longitude } = req.body;
   const landlord_id = req.user.id; // get from JWT
@@ -27,7 +27,7 @@ export const addRoom = (req, res) => {
   );
 };
 
-// // View All Rooms (Tenant)
+// // 2️⃣ View All Rooms (Tenant)
 // export const getRooms = (req, res) => {
 //   const sql = "SELECT * FROM rooms";
 //   db.query(sql, (err, results) => {
@@ -60,7 +60,7 @@ export const getRooms = (req, res) => {
   }
 };
 
-// //  Update Room (Landlord)
+// // 3️⃣ Update Room (Landlord)
 // export const updateRoom = (req, res) => {
 //   const roomId = req.params.id;
 //   const { title, description, price, location, type, status } = req.body;
@@ -87,7 +87,7 @@ export const updateRoom = (req, res) => {
   });
 };
 
-// //  Delete Room (Landlord)
+// // 4️⃣ Delete Room (Landlord)
 // export const deleteRoom = (req, res) => {
 //   const roomId = req.params.id;
 
@@ -111,7 +111,7 @@ export const deleteRoom = (req, res) => {
   });
 };
 
-//  Search & Filter Rooms (Tenant)
+// 5️⃣ Search & Filter Rooms (Tenant)
 export const searchRooms = (req, res) => {
   const { province, district, city, price, type, status } = req.query;
 
@@ -154,7 +154,7 @@ export const searchRooms = (req, res) => {
   });
 };
 
-// Update Room Status (Booked/Available)
+// 6️⃣ Update Room Status (Booked/Available)
 export const updateRoomStatus = (roomId, status, callback) => {
   const sql = "UPDATE rooms SET status=? WHERE id=?";
   db.query(sql, [status, roomId], (err, result) => {
