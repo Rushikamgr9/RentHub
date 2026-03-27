@@ -1,50 +1,86 @@
 import { useState, useEffect } from "react";
-import Input from "../Input";
-import Button from "../Button";
 
-export default function RoomForm({ onSave, editing }) {
+function RoomForm({ addRoom, updateRoom, editingRoom, cancelEdit }) {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
-  const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (editing) {
-      setTitle(editing.title);
-      setPrice(editing.price);
-      setLocation(editing.location);
+    if (editingRoom) {
+      setTitle(editingRoom.title);
+      setPrice(editingRoom.price);
+      setLocation(editingRoom.location);
     }
-  }, [editing]);
-
-  const validate = () => {
-    const errs = {};
-    if (!title.trim()) errs.title = "Title is required";
-    if (!price || isNaN(price)) errs.price = "Valid price required";
-    if (!location.trim()) errs.location = "Location required";
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
+  }, [editingRoom]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validate()) return;
 
-    const room = editing
-      ? { ...editing, title, price, location }
-      : { id: Date.now(), title, price, location, status: "Available" };
-    onSave(room);
+    if (!title || !price || !location) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    if (editingRoom) {
+      updateRoom({
+        ...editingRoom,
+        title,
+        price: Number(price),
+        location
+      });
+    } else {
+      addRoom({ title, price: Number(price), location });
+    }
+
     setTitle("");
     setPrice("");
     setLocation("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="room-form">
-      <h3>{editing ? "Edit Room" : "Add New Room"}</h3>
-      <Input label="Title" value={title} onChange={e => setTitle(e.target.value)} error={errors.title} />
-      <Input label="Price" type="number" value={price} onChange={e => setPrice(e.target.value)} error={errors.price} />
-      <Input label="Location" value={location} onChange={e => setLocation(e.target.value)} error={errors.location} />
-      <Button type="submit" primary>{editing ? "Update" : "Add"}</Button>
+    <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow mb-6">
+      <h3 className="font-bold text-lg mb-3">{editingRoom ? "Edit Room" : "Add New Room"}</h3>
+
+      <input
+        type="text"
+        placeholder="Room Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="w-full border p-2 rounded mb-2"
+      />
+
+      <input
+        type="number"
+        placeholder="Price"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        className="w-full border p-2 rounded mb-2"
+      />
+
+      <input
+        type="text"
+        placeholder="Location"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+        className="w-full border p-2 rounded mb-2"
+      />
+
+      <div className="flex gap-2 mt-2">
+        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+          {editingRoom ? "Update Room" : "Add Room"}
+        </button>
+        {editingRoom && (
+          <button
+            type="button"
+            onClick={cancelEdit}
+            className="bg-gray-400 text-white px-4 py-2 rounded"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }
+
+export default RoomForm;
