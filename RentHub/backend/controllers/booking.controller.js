@@ -1,7 +1,7 @@
 // backend/controllers/booking.controller.js
 import db from "../db.js";
 
-// 1️⃣ Request a booking (Tenant)
+// Request a booking (Tenant)
 export const requestBooking = (req, res) => {
   const tenant_id = req.user.id;
   const { room_id } = req.body;
@@ -13,7 +13,7 @@ export const requestBooking = (req, res) => {
   });
 };
 
-// 2️⃣ View bookings (Landlord sees bookings for their rooms)
+// View bookings (Landlord sees bookings for their rooms)
 export const getBookings = (req, res) => {
   const { id, role } = req.user;
 
@@ -50,7 +50,7 @@ export const getBookings = (req, res) => {
   });
 };
 
-// 3️⃣ Approve / Reject Booking (Landlord)
+// Approve / Reject Booking (Landlord)
 export const updateBookingStatus = (req, res) => {
   const { id } = req.params; // booking id
   const { status } = req.body; // "approved" or "rejected"
