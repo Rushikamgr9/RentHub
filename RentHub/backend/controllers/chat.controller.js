@@ -1,7 +1,7 @@
 // backend/controllers/chat.controller.js
 import db from "../db.js";
 
-// 1️⃣ Send message
+// Send message
 export const sendMessage = (req, res) => {
   const { message, receiver_id, type } = req.body;
   const sender_id = req.user.id; // get sender from JWT
@@ -17,7 +17,7 @@ export const sendMessage = (req, res) => {
   });
 };
 
-// 2️⃣ Get all messages between two users
+// Get all messages between two users
 export const getMessages = (req, res) => {
   const user_id = req.user.id;
   const { other_user_id } = req.query;
@@ -37,7 +37,7 @@ export const getMessages = (req, res) => {
   });
 };
 
-// 3️⃣ Get list of all conversations for a user
+// Get list of all conversations for a user
 export const getConversations = (req, res) => {
   const user_id = req.user.id;
 
