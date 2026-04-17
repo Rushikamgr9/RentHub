@@ -6,7 +6,7 @@ export const addRoom = (req, res) => {
   const { title, description, price, location, latitude, longitude } = req.body;
   const landlord_id = req.user.id; // get from JWT
 
-  // Basic validation
+  // Basic Validation
   if (!title || !description || !price || !location) {
     return res.status(400).json({ message: "All fields are required" });
   }
